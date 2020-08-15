@@ -1,63 +1,51 @@
 body {
     background-color: lightgrey;
 }
-.grid {
-    flex-direction: column;
-    width: 650px;
-    height: 500px;
-margin: 0 auto;
-background-color: #fff;
-padding: 10px 50px 50px 50px;
-border-radius: 50px;
-border: 2px solid #cbcbcb;
-box-shadow: 10px 15px 5px #cbcbcb;
 
+h1 {
+    color:  rgb(16, 146, 16);
+    text-decoration: underline;
+    font-size: 45px;
+    font-weight: bolder;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
-.grid h1 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: blue;
-    font-size: 60px;
-    text-align: center;
-    color: #fff;
-    padding: 2px 0px;
-    border-radius: 50px;
-}
-.grid #question {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: 18px;
-    color: darkgrey;
-}
-.buttons {
-    margin-top: 30px;
 
+h2, h5, a, span {
+    color: rgb(0, 0, 0);
 }
-#btn0, #btn1, #btn2, #btn3 {
-    background-color: darkmagenta;
-    width: 250px;
-    height: 80px;
-    font-size: 15px;
-    color: black;
-    border: 1px solid #1d3c6a;
-    border-radius: 50px;
-    margin: 15px 45px 10px 0px;
-    padding: 15px 10px;
-}
-#score {
-    color: black;
-    text-align: center;
-    font-size: 30px;
-}
-#progress {
-    color: darkgray;
-    font-size: 18px;
-    margin-bottom: 15px;
-   
-}
-#btn0:hover, #btn1:hover, #btn2:hover, #btn3:hover  {
-    cursor: pointer;
-    background: darkgray;
 
+
+.p-2 {
+    font-size: 22px; 
+     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-#btn0:focus, #btn1:focus, #btn2:focus, #btn3:focus {
-    outline: 0;
+
+#score-list {
+    font-size: 21px;
+    color: rgb(0, 0, 0);   
+    }
+
+
+ol {
+    list-style: none;
+    counter-reset: li;
+}
+
+li {
+    counter-increment: li;
+}
+
+li::before {
+    content: "." counter(li);
+    color: rgb(43, 43, 122);
+    display: inline-block;
+    width: 16px;
+    margin-left: -24px;
+    margin-right: 10px;
+    text-align: right;
+    direction: rtl;
+}
+
+#scoresTitle {
+    padding-left: 16px;
 }

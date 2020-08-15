@@ -1,61 +1,116 @@
-// Click the button to start the quiz
-// you will have 10 seconds to answer 
-// if answer is correct or incorrect  you will see feedback
-// see progress
-// you will the the score at the end
+var startBtn = document.getElementById("startBtn");
+var submitBtn = document.querySelector("button.submitBtn")
+var secondsLeft = (questions.length * 20 + 1);
+var timerElement = document.getElementById("timer");
+var submitScoreElement = document.querySelector("#submit-score");
+var userScoreElement = document.getElementById("user-score");
+var userNameInput;
+var questionHead = document.getElementById("questions");
+var answerChoices = document.getElementById("answers");
 
-// create function populate questions
-function populate() {
-    if (quiz.isEnded()) {
-        showScores()
-    }
-    else {
-        // show questions
-        var element = document.getElementById("question");
-        element.innerHTML = quiz.getQuestionIndex().text;
+var questionNumber = -1;
+var answer;
 
-        // populate the answers:
-        // show choices:
-        var choices = quiz.getQuestionIndex().choices;
-        for (var i = 0; i < choices.length; i++) {
-            var element = document.getElementById("choice" + i);
-            element.innerHTML = choices[i];
-            guess("btn" + i, choices[i]);
+
+function startTimer() {
+
+    document.getElementById("home").classList.add('d-none');
+    document.getElementById("quiz").classList.remove('d-none');
+
+    // timer set and begins 120 second countdown
+    setTimer();
+
+    // create questions to display
+    makeQuestions();
+}
+
+function setTimer() {
+
+    var countdown = setInterval(function () {
+        secondsLeft--;
+        timerElement.textContent = "Time: " + secondsLeft;
+
+        if (secondsLeft === 0 || questionNumber === questions.length) {
+            clearInterval(countdown);
+            setTimeout(displayScore, 500);
         }
-        showProgress()
+    }, 1000);
+}
+
+function makeQuestions() {
+    questionNumber++;
+    answer = questions[questionNumber].answer
+
+    questionHead.textContent = questions[questionNumber].title;
+    answerChoices.innerHTML = "";
+
+    var choices = questions[questionNumber].choices;
+
+    for (var q = 0; q < choices.length; q++) {
+        var nextChoice = document.createElement("button");
+
+        nextChoice.textContent = choices[q]
+        answerBtn = answerChoices.appendChild(nextChoice).setAttribute("class", "p-3 m-1 btn btn-light btn-block");
     }
-};
+}
 
-function guess(id, guess) {
-    var button = document.getElementById(id);
-    button.onclick = function () {
-        quiz.guess(guess);
-        populate();
+// display option to enter name to scoreboard
+function displayScore() {
+    document.getElementById("quiz").classList.add('d-none');
+    document.getElementById("submit-score").classList.remove('d-none');
+    userScoreElement.textContent = "FINAL SCORE: " + secondsLeft + ".";
+}
+
+// Event Listeners for Main Buttons
+startBtn.addEventListener("click", startTimer);
+submitBtn.addEventListener("click", function (event) {
+    event.stopPropagation();
+    addScore();
+
+    window.location.href = './highscores.html'
+});
+
+function addScore() {
+    userNameInput = document.getElementById("userName").value
+
+    // create a new object with name and score keys
+    var newScore = {
+        name: userNameInput,
+        score: secondsLeft
+    };
+    // check if there are scores in local storage first and take value
+    //if not, make a blank array
+    var highScores = JSON.parse(localStorage.getItem("highScores") || "[]");
+    // push object into score array
+    highScores.push(newScore)
+    // turn objects into an array of strings + put it into local storage
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+}
+
+function hideFeedback() {
+    var pElement = document.getElementsByClassName("feedback")[0]
+    pElement.style.display = 'none'
+}
+
+function showFeedback() {
+    var pElement = document.getElementsByClassName("feedback")[0]
+    pElement.removeAttribute('style');
+}
+
+answerChoices.addEventListener("click", function (event) {
+    var pElement = document.getElementsByClassName("feedback")[0]
+
+    // evaluation of user's answer choices & feedback
+    if (answer === event.target.textContent) {
+        pElement.innerHTML = "YES!";
+        setTimeout(hideFeedback, 1225);
+        showFeedback();
+
+    } else {
+        pElement.innerHTML = "WRONG.";
+        setTimeout(hideFeedback, 1225);
+        secondsLeft = secondsLeft - 20;
+        showFeedback();
     }
-};
-
-function showProgress() {
-    var currentQuestionNumber = quiz.questionIndex + 1;
-    var element = document.getElementById("progress");
-    element.innerHTML = "Question " + currentQuestionNumber + " of " + quiz.questions.length;
-};
-function showScores() {
-    var gameOverHTML = "<h1>Result</h1>";
-    gameOverHTML += "<h2 id='score'> Your scores: " + quiz.score + "</h2>";
-    var element = document.getElementById("quiz");
-    element.innerHTML = gameOverHTML;
-};
-
-// set the questions:
-
-var questions = [
-    new Question("Sometimes students have a lower tolerance for ambiguity. What is the most appropriate strategy to handle this?", ["Repeat multiple times the same phrase in the target language", "Use full-phrase translation to help the student understand in English", "Provide comprehensible input", "Do nothing"], "Provide comprehensible input"),
-    new Question("This is a type of comprehension check that helps students develop vocabulary", ['Bookending', 'Binary option', 'Venn diagram', 'Text alerts'], "Binary option"),
-    new Question("Describing or defining a concept instead of saying or writing the specific words, usually in order to fill in a lexical gap. What strategy does this refer to?", ['Cognates', 'Circumlocution', 'Glossing', 'Discussion'], 'Circumlocution'),
-    new Question('How long is an appropriate time for small talk in class?', ['20 min ', '5 min', 'As long as it takes', 'No small talk in class'], '5 min'),
-    new Question('What does it mean to modify your speech for students?', ["translate for students", "speak slower", "reduce your rate of speech", "speak louder"], "reduce your rate of speech")
-];
-
-var quiz = new Quiz(questions);
-
-populate();
+    makeQuestions();
+});
