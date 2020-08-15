@@ -1,12 +1,11 @@
 
 // set attributes
-function Question(text, choice, answer) {
+function Question(text, choices, answer) {
     this.text = text;
+    this.choices = choices;
     this.answer = answer;
-    this.choice = choice;
-
-}
-Question.prototype.correct.Annswer = function (choice) {
-    return choice === this.answer;
 }
 
+Question.prototype.isCorrectAnswer = function (choice) {
+    return this.answer === choice;
+}
