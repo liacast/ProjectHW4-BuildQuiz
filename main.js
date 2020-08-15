@@ -13,7 +13,7 @@ var answer;
 
 
 function startTimer() {
-
+ 
     document.getElementById("home").classList.add('d-none');
     document.getElementById("quiz").classList.remove('d-none');
 
@@ -66,15 +66,15 @@ startBtn.addEventListener("click", startTimer);
 submitBtn.addEventListener("click", function (event) {
     event.stopPropagation();
     addScore();
-
+    
     window.location.href = './highscores.html'
 });
 
-function addScore() {
+function addScore () {
     userNameInput = document.getElementById("userName").value
-
+    
     // create a new object with name and score keys
-    var newScore = {
+var newScore = {
         name: userNameInput,
         score: secondsLeft
     };
@@ -87,30 +87,30 @@ function addScore() {
     localStorage.setItem("highScores", JSON.stringify(highScores));
 }
 
-function hideFeedback() {
+function hideFeedback(){
     var pElement = document.getElementsByClassName("feedback")[0]
-    pElement.style.display = 'none'
+    pElement.style.display='none'
 }
 
-function showFeedback() {
+function showFeedback(){
     var pElement = document.getElementsByClassName("feedback")[0]
     pElement.removeAttribute('style');
 }
 
 answerChoices.addEventListener("click", function (event) {
     var pElement = document.getElementsByClassName("feedback")[0]
-
+    
     // evaluation of user's answer choices & feedback
-    if (answer === event.target.textContent) {
+    if (answer === event.target.textContent) {   
         pElement.innerHTML = "YES!";
-        setTimeout(hideFeedback, 1225);
-        showFeedback();
-
+        setTimeout(hideFeedback,1225);
+        showFeedback();   
+        
     } else {
         pElement.innerHTML = "WRONG.";
-        setTimeout(hideFeedback, 1225);
+        setTimeout(hideFeedback,1225);
         secondsLeft = secondsLeft - 20;
         showFeedback();
-    }
+    }    
     makeQuestions();
 });
